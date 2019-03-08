@@ -9,5 +9,5 @@ RUN set -ex \
     && unzip "rclone-v${RCLONE_VERSION}-linux-${ARCH}.zip" \
     && mv rclone-*-linux-${ARCH}/rclone /usr/bin
 
-FROM golang:1-alpine
+FROM alpine:3.9
 COPY --from=builder /usr/bin/rclone /usr/bin/rclone
