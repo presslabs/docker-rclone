@@ -1,13 +1,12 @@
 FROM golang:1-alpine as builder
 
-ARG RCLONE_VERSION="1.46"
-ARG ARCH="amd64"
+ARG RCLONE_VERSION="17d90351916ed512d38a9eb724cc9b80490acaf6"
 
 RUN set -ex \
-    && apk add --no-cache wget \
-    && wget -q "http://downloads.rclone.org/v${RCLONE_VERSION}/rclone-v${RCLONE_VERSION}-linux-${ARCH}.zip" \
-    && unzip "rclone-v${RCLONE_VERSION}-linux-${ARCH}.zip" \
-    && mv rclone-*-linux-${ARCH}/rclone /usr/bin
+    && apk add --no-cache wget make bash git \
+    && wget -q "https://github.com/ncw/rclone/archive/${RCLONE_VERSION}.zip" \
+    && mkdir rclone && unzip -d rclone "${RCLONE_VERSION}.zip" \
+    && cd rclone/*/ &&  make install
 
 FROM alpine:3.9
 
