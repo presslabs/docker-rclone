@@ -12,7 +12,7 @@ RUN set -ex \
 FROM alpine:3.9
 
 RUN apk update \
-        && apk add ca-certificates
+        && apk add ca-certificates bash
 
 COPY --from=builder /usr/bin/rclone /usr/bin/rclone
 COPY ./entrypoint.sh /
