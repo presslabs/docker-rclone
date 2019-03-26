@@ -32,7 +32,7 @@ file_env 'AZUREBLOB_KEY' ''
 
 echo "Create rclone.conf file."
 
-cat <<EOF > /etc/rclone.conf
+cat <<EOF > /etc/rclone/rclone.conf
 [s3]
     type = s3
     env_auth = false

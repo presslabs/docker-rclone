@@ -13,6 +13,13 @@ FROM alpine:3.9
 RUN apk update \
         && apk add ca-certificates bash
 
+RUN adduser -D rclone \
+        && mkdir /etc/rclone/ \
+        && chown rclone: /etc/rclone \
+        && mkdir -p home/rclone/.config/rclone/ \
+        && ln -s /etc/rclone/rclone.conf /home/rclone/.config/rclone/rclone.conf
+USER rclone
+
 COPY --from=builder /usr/bin/rclone /usr/bin/rclone
 COPY ./entrypoint.sh /
 
