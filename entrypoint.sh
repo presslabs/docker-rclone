@@ -27,7 +27,7 @@ file_env() {
     unset "$fileVar"
 }
 
-file_env 'GCS_SERVICE_ACCOUNT_JSON_KEY' ''
+file_env 'GOOGLE_CREDENTIALS' ''
 file_env 'AZUREBLOB_KEY' ''
 
 echo "Create rclone.conf file."
@@ -37,23 +37,26 @@ cat <<EOF > /etc/rclone.conf
     type = s3
     env_auth = false
     provider = ${S3_PROVIDER:-"AWS"}
-    access_key_id = ${AWS_ACCESS_KEY_ID}
-    secret_access_key = ${AWS_SECRET_KEY}
-    region = ${AWS_REGION:-"us-east-1"}
+    access_key_id = ${S3_ACCESS_KEY_ID}
+    secret_access_key = ${S3_SECRET_KEY}
+    region = ${S3_REGION:-"us-east-1"}
     endpoint = ${S3_ENDPOINT}
-    acl = ${AWS_ACL}
-    storage_class = ${AWS_STORAGE_CLASS}
+    acl = ${S3_ACL}
+    storage_class = ${S3_STORAGE_CLASS}
+
 [gs]
     type = google cloud storage
-    project_number = ${GCS_PROJECT_ID}
+    project_number = ${GOOGLE_PROJECT_ID}
     service_account_file = /tmp/google-credentials.json
-    object_acl = ${GCS_OBJECT_ACL}
-    bucket_acl = ${GCS_BUCKET_ACL}
-    location =  ${GCS_LOCATION}
-    storage_class = ${GCS_STORAGE_CLASS:-"MULTI_REGIONAL"}
+    object_acl = ${GOOGLE_OBJECT_ACL}
+    bucket_acl = ${GOOGLE_BUCKET_ACL}
+    location =  ${GOOGLE_LOCATION}
+    storage_class = ${GOOGLE_STORAGE_CLASS:-"MULTI_REGIONAL"}
+
 [http]
     type = http
     url = ${HTTP_URL}
+
 [azure]
     type = azure blob storage
     account = ${AZUREBLOB_ACCOUNT}
@@ -62,7 +65,7 @@ EOF
 
 echo "Create google-credentials.json file."
 cat <<EOF > /tmp/google-credentials.json
-${GCS_SERVICE_ACCOUNT_JSON_KEY}
+${GOOGLE_CREDENTIALS}
 EOF
 
 exec rclone "$@"
